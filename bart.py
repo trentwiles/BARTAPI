@@ -86,16 +86,21 @@ def getDataStation(abv):
             doors = 2
 
 
-        return {"formatted": formatted, "doors": doors, "cars": cars, "time": time}
+        return {"formatted": formatted, "doors": doors, "cars": cars, "timeFormatted": time, "time": processTimeString(time)}
         
     def processTimeString(timeString):
         time = 0
-        if(timeString[0])
-        return 
+        stringNumbers = "0123456789"
+        for x in stringNumbers:
+            if(timeString[0] == x):
+                time = int(timeString[0])
+            if(timeString[0] == x and timeString[1] == x):
+                time = int(timeString[0:2])
+        return time
 
     soup = BeautifulSoup(requests.get(f"https://www.bart.gov/schedules/eta/{abv}").text, 'html.parser')
 
-    lines = ["orange", "yellow", "blue", "red", "green"]
+    lines = ["orange", "yellow", "blue", "red", "green", "white"]
     leaveTimesDivs = soup.findAll("span")
     allLineLeaveTimes = soup.findAll("span", {"class": "schedule-route-stops"})
 
@@ -133,7 +138,6 @@ def getDataStation(abv):
 
 
     preFormatedJson = []
-
     for number in range(len(timings)):
         timingsToInsert = []
         for x in range(len(timings[number])):
@@ -143,10 +147,3 @@ def getDataStation(abv):
         preFormatedJson.append({"lineTerminus": servedLines[number], "lineColor": servedLinesColors[number], "estimates": timingsToInsert})
     #print(preFormatedJson)
     return json.dumps({"error": False, "station": getEnglishStationNameFromAbbreviation(abv), "estimates": preFormatedJson})
-    # print(leaveTimesDivs.findAll("span"))
-    # for x in soup.findAll("div", {"class": "schedule-route schedule-route--style-long"}):
-    #     soup2 = BeautifulSoup(x.text, 'html.parser')
-    #     print(x)
-    #     print("========================")
-
-print(getDataStation("ROCK"))

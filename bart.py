@@ -8,67 +8,69 @@ import json
 # (8 car(Three Door Train)
 # (6 car(Three Door Train))
 # (6 car)
+
+def getStationAbbreviations():
+    # I have about half of them
+    return {
+        "12th St. Oakland City Center": "12TH",
+        "16th St. Mission (SF)": "16TH",
+        "19th St. Oakland": "19TH",
+        "24th St. Mission (SF)": "24TH",
+        "Ashby (Berkeley)": "ASHB",
+        "Antioch": "ANTC",
+        "Balboa Park (SF)": "BALB",
+        "Bay Fair (San Leandro)": "BAYF",
+        "Castro Valley": "CAST",
+        "Civic Center (SF)": "CIVC",
+        "Coliseum": "COLS",
+        "Colma": "COLM",
+        "Concord": "CONC",
+        "Daly City": "DALY",
+        "Downtown Berkeley": "DBRK",
+        "Dublin/Pleasanton": "DUBL",
+        "El Cerrito del Norte": "DELN",
+        "El Cerrito Plaza": "PIZA",
+        "Embarcadero (SF)": "EMBR",
+        "Fremont": "FRMT",
+        "Fruitvale (Oakland)": "FTVL",
+        "Glen Park (SF)": "GLEN",
+        "Hayward": "HAYW",
+        "Lafayette": "LAFY",
+        "Lake Merritt (Oakland)": "LAKE",
+        "MacArthur (Oakland)": "MCAR",
+        "Millbrae": "MIBR",
+        "Montgomery St. (SF)": "MONT",
+        "North Berkeley": "NBRK",
+        "North Concord/Martinez": "NCON",
+        "Oakland Int'l Airport": "OAKL",
+        "Orinda": "ORIN",
+        "Pittsburg/Bay Point": "PITT",
+        "Pittsburg Center": "PCTR",
+        "Pleasant Hill": "PHIL",
+        "Powell St. (SF)": "POWL",
+        "Richmond": "RICH",
+        "Rockridge (Oakland)": "ROCK",
+        "San Bruno": "SBRN",
+        "San Leandro": "SANL",
+        "South San Fransisco": "SSAN",
+        "Union City": "UCTY",
+        "Warm Springs/South Fremont": "WARM",
+        "Walnut Creek": "WCRK",
+        "West Dublin": "WDUB",
+        "West Oakland": "WOAK"
+    }
+
+def getStationAbbreviationByName(name):
+    return getStationAbbreviations()[name]
+
+def getEnglishStationNameFromAbbreviation(name):
+    list = []
+    for x in getStationAbbreviations().items():
+        if name == x[1]:
+            return x[0]
+    return None
+
 def getDataStation(abv):
-    def getStationAbbreviations():
-        # I have about half of them
-        return {
-            "12th St. Oakland City Center": "12TH",
-            "16th St. Mission (SF)": "16TH",
-            "19th St. Oakland": "19TH",
-            "24th St. Mission (SF)": "24TH",
-            "Ashby (Berkeley)": "ASHB",
-            "Antioch": "ANTC",
-            "Balboa Park (SF)": "BALB",
-            "Bay Fair (San Leandro)": "BAYF",
-            "Castro Valley": "CAST",
-            "Civic Center (SF)": "CIVC",
-            "Coliseum": "COLS",
-            "Colma": "COLM",
-            "Concord": "CONC",
-            "Daly City": "DALY",
-            "Downtown Berkeley": "DBRK",
-            "Dublin/Pleasanton": "DUBL",
-            "El Cerrito del Norte": "DELN",
-            "El Cerrito Plaza": "PIZA",
-            "Embarcadero (SF)": "EMBR",
-            "Fremont": "FRMT",
-            "Fruitvale (Oakland)": "FTVL",
-            "Glen Park (SF)": "GLEN",
-            "Hayward": "HAYW",
-            "Lafayette": "LAFY",
-            "Lake Merritt (Oakland)": "LAKE",
-            "MacArthur (Oakland)": "MCAR",
-            "Millbrae": "MIBR",
-            "Montgomery St. (SF)": "MONT",
-            "North Berkeley": "NBRK",
-            "North Concord/Martinez": "NCON",
-            "Oakland Int'l Airport": "OAKL",
-            "Orinda": "ORIN",
-            "Pittsburg/Bay Point": "PITT",
-            "Pittsburg Center": "PCTR",
-            "Pleasant Hill": "PHIL",
-            "Powell St. (SF)": "POWL",
-            "Richmond": "RICH",
-            "Rockridge (Oakland)": "ROCK",
-            "San Bruno": "SBRN",
-            "San Leandro": "SANL",
-            "South San Fransisco": "SSAN",
-            "Union City": "UCTY",
-            "Warm Springs/South Fremont": "WARM",
-            "Walnut Creek": "WCRK",
-            "West Dublin": "WDUB",
-            "West Oakland": "WOAK"
-        }
-
-    def getStationAbbreviationByName(name):
-        return getStationAbbreviations()[name]
-
-    def getEnglishStationNameFromAbbreviation(name):
-        list = []
-        for x in getStationAbbreviations().items():
-            if name == x[1]:
-                return x[0]
-        return None
     
     def processCarString(trainString, time):
         numberCars = trainString[1:6]
@@ -86,6 +88,10 @@ def getDataStation(abv):
 
         return {"formatted": formatted, "doors": doors, "cars": cars, "time": time}
         
+    def processTimeString(timeString):
+        time = 0
+        if(timeString[0])
+        return 
 
     soup = BeautifulSoup(requests.get(f"https://www.bart.gov/schedules/eta/{abv}").text, 'html.parser')
 
@@ -136,7 +142,7 @@ def getDataStation(abv):
         
         preFormatedJson.append({"lineTerminus": servedLines[number], "lineColor": servedLinesColors[number], "estimates": timingsToInsert})
     #print(preFormatedJson)
-    return json.dumps({"station": getEnglishStationNameFromAbbreviation(abv), "estimates": preFormatedJson})
+    return json.dumps({"error": False, "station": getEnglishStationNameFromAbbreviation(abv), "estimates": preFormatedJson})
     # print(leaveTimesDivs.findAll("span"))
     # for x in soup.findAll("div", {"class": "schedule-route schedule-route--style-long"}):
     #     soup2 = BeautifulSoup(x.text, 'html.parser')

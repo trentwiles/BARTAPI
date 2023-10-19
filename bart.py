@@ -70,34 +70,38 @@ def getEnglishStationNameFromAbbreviation(name):
             return x[0]
     return None
 
+def processTimeString(timeString):
+    time = 0
+    stringNumbers = "0123456789"
+    for x in stringNumbers:
+        if(timeString[0] == x):
+            time = int(timeString[0])
+    for x in stringNumbers:
+        if(timeString[1] == x):
+            time = int(timeString[0:2])  
+    # I don't think they have predictions beyond 100 minutes, but it can't hurt
+    for x in stringNumbers:
+        if(timeString[2] == x):
+            time = int(timeString[0:3]) 
+    return time
+
+def processCarString(trainString, time):
+    numberCars = trainString[1:6]
+
+    formatted = numberCars + ", unknown door train"
+    doors = -1
+    cars = int(trainString[1:3])
+    if "Three Door Train" in trainString:
+        formatted = numberCars + ", " + "3 door train"
+        doors = 3
+    if "Two Door Train" in trainString:
+        formatted = numberCars + ", " + "2 door train"
+        doors = 2
+
+
+    return {"formatted": formatted, "doors": doors, "cars": cars, "timeFormatted": time, "time": processTimeString(time)}
+
 def getDataStation(abv):
-    
-    def processCarString(trainString, time):
-        numberCars = trainString[1:6]
-
-        formatted = numberCars + ", unknown door train"
-        doors = -1
-        cars = int(trainString[1:3])
-        if "Three Door Train" in trainString:
-            formatted = numberCars + ", " + "3 door train"
-            doors = 3
-        if "Two Door Train" in trainString:
-            formatted = numberCars + ", " + "2 door train"
-            doors = 2
-
-
-        return {"formatted": formatted, "doors": doors, "cars": cars, "timeFormatted": time, "time": processTimeString(time)}
-        
-    def processTimeString(timeString):
-        time = 0
-        stringNumbers = "0123456789"
-        for x in stringNumbers:
-            if(timeString[0] == x):
-                time = int(timeString[0])
-            if(timeString[0] == x and timeString[1] == x):
-                time = int(timeString[0:2])
-        return time
-
     soup = BeautifulSoup(requests.get(f"https://www.bart.gov/schedules/eta/{abv}").text, 'html.parser')
 
     lines = ["orange", "yellow", "blue", "red", "green", "white"]

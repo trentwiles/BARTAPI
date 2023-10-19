@@ -1,6 +1,8 @@
 from flask import Flask, Response
 import bart
 import stations
+import alerts
+import schedule
 import json
 
 app = Flask(__name__)
@@ -11,7 +13,7 @@ def jsonResp(input, status):
 
 @app.route('/')
 def home():
-    return jsonResp({"error": False, "message": "Check out bart.trentwil.es for documentation"})
+    return jsonResp({"error": False, "message": "Check out bart.trentwil.es for documentation"}, 200)
 
 @app.route("/api/v1/getPredictions/<station>")
 def getPred(station):
@@ -24,6 +26,14 @@ def getPred(station):
 @app.route("/api/v1/getStations")
 def getStations():
     return Response(stations.getStations(), content_type="application/json")
+
+@app.route("/api/v1/getAlerts")
+def getAlerts():
+    return Response(alerts.getAlerts(), content_type="application/json")
+
+@app.route("/api/v1/getSchedule")
+def getSchedule():
+    return Response(schedule.getSchedule("ROCK", "10", "19", "2023", "06:00", "AM"), content_type="application/json")
 
 if __name__ == '__main__':
     app.run()

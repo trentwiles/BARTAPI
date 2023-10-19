@@ -7,6 +7,7 @@ import sys
 
 def getSchedule(abv, month, day, year, time, amOrpm):#06%3A00%3AAM
     formattedTime = urllib.parse.quote(time + "%3A" + amOrpm)
+    print(f"https://www.bart.gov/schedules/stnsched/{abv.upper()}/{month}.{day}.{year}/{formattedTime}")
     r = requests.get(f"https://www.bart.gov/schedules/stnsched/{abv.upper()}/{month}.{day}.{year}/{formattedTime}")
     soup = BeautifulSoup(r.text, 'html.parser')
 

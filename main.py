@@ -31,9 +31,9 @@ def getStations():
 def getAlerts():
     return Response(alerts.getAlerts(), content_type="application/json")
 
-@app.route("/api/v1/getSchedule")
-def getSchedule():
-    return Response(schedule.getSchedule("ROCK", "10", "19", "2023", "06:00", "AM"), content_type="application/json")
+@app.route("/api/v1/getSchedule/<abv>/<month>/<day>/<year>/<time>/<amPM>")
+def getSchedule(abv, month, day, year, time, amPM):
+    return Response(schedule.getSchedule(abv, month, day, year, time, amPM), content_type="application/json")
 
 if __name__ == '__main__':
     app.run()

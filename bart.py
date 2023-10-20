@@ -102,7 +102,12 @@ def processCarString(trainString, time):
     return {"formatted": formatted, "doors": doors, "cars": cars, "timeFormatted": time, "time": processTimeString(time)}
 
 def getDataStation(abv):
-    soup = BeautifulSoup(requests.get(f"https://www.bart.gov/schedules/eta/{abv}").text, 'html.parser')
+    r = requests.get(f"https://www.bart.gov/schedules/eta/{abv}")
+    soup = BeautifulSoup(r.text, 'html.parser')
+
+    if r.status_code != 200:
+        return json.dumps({"error": True, "message": "BART website returned a non-200 status code. Check back later."})
+    
 
     lines = ["orange", "yellow", "blue", "red", "green", "white"]
     leaveTimesDivs = soup.findAll("span")

@@ -33,7 +33,9 @@ def getAlerts():
 
 @app.route("/api/v1/getSchedule/<abv>/<month>/<day>/<year>/<time>/<amPM>")
 def getSchedule(abv, month, day, year, time, amPM):
-    return Response(schedule.getSchedule(abv, month, day, year, time, amPM), content_type="application/json")
+    if bart.getEnglishStationNameFromAbbreviation(abv.upper()) != None:
+        return Response(schedule.getSchedule(abv, month, day, year, time, amPM), content_type="application/json")
+    return jsonResp({"error": True, "message": "Invalid station"}, 400)
 
 if __name__ == '__main__':
     app.run()

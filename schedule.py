@@ -21,7 +21,6 @@ def getSchedule(abv, month, day, year, time, amOrpm):#06%3A00%3AAM
         return json.dumps({"error": True, "message": "No trains at this time"})
     north = soup.find_all("div", {"class": "schedule-platform"})[0].find_all("li")
 
-
     northTrains = []
 
     if "No trains" not in north[0].text:
@@ -38,8 +37,8 @@ def getSchedule(abv, month, day, year, time, amOrpm):#06%3A00%3AAM
         south = soup.find_all("div", {"class": "schedule-platform"})[1].find_all("li")
 
     southTrains = []
-    print(soup.find_all("div", {"class": "schedule-platform"})[1].find_all("li"))
-    if "No trains" not in south[0].text:
+
+    if type(south) != str:
         for train in south:
             patern = r'schedule-route-title--([a-zA-Z]+)'
             color = re.search(patern, train.find("span", {"class": "schedule-route-title"}).get("class")[1]).group(1).capitalize()

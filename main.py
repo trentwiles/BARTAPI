@@ -1,8 +1,9 @@
-from flask import Flask, Response
+from flask import Flask, Response, make_response
 import bart
 import stations
 import alerts
 import schedule
+import bartLogs
 import json
 
 app = Flask(__name__)
@@ -17,11 +18,16 @@ def home():
 
 @app.route("/api/v1/getPredictions/<station>")
 def getPred(station):
+    requestID = bartLogs.createRequestID()
     try:
         bart.getEnglishStationNameFromAbbreviation(station)
     except:
         return jsonResp({"error": True, "message": "Invalid station name, use /api/v1/getStations to get the list of BART stations"})
-    return Response(bart.getDataStation(station), content_type="application/json")
+    
+    
+    m = make_response(Response(bart.getDataStation(station), content_type="application/json"))
+    m.headers["x-request-id"] = requestID
+    return m
 
 @app.route("/api/v1/getStations")
 def getStations():

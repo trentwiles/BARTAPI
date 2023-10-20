@@ -104,7 +104,7 @@ def processCarString(trainString, time):
 def getDataStation(abv):
     r = requests.get(f"https://www.bart.gov/schedules/eta/{abv}")
     soup = BeautifulSoup(r.text, 'html.parser')
-
+    abv = abv.upper()
     if r.status_code != 200:
         return json.dumps({"error": True, "message": "BART website returned a non-200 status code. Check back later."})
     

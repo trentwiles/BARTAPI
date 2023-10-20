@@ -16,6 +16,30 @@ def jsonResp(input, status):
 def home():
     return jsonResp({"error": False, "message": "Check out bart.trentwil.es for documentation"}, 200)
 
+"""
+GET /api/v1/getPredictions/:station Get Train Predictions/Arrival Times
+@apiName getPredictions
+
+@apiParam {String} station BART Station Abreviation
+
+@apiSuccess {String} firstname Firstname of the User.
+
+@apiSuccessExample Success-Response:
+    HTTP/1.1 200 OK
+    {
+        "firstname": "John",
+        "lastname": "Doe"
+    }
+
+@apiError UserNotFound The id of the User was not found.
+
+@apiErrorExample Error-Response:
+    HTTP/1.1 404 Not Found
+    {
+        "error": "UserNotFound"
+    }
+"""
+
 @app.route("/api/v1/getPredictions/<station>")
 def getPred(station):
     requestID = bartLogs.createRequestID()

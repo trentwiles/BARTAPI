@@ -1,0 +1,5 @@
+{
+    "name": "Unofficial BART API",
+    "version": "0.0.1 Alpha",
+    "description": "An unofficial implementation of BART's API, created because the offical version does not function as intended."
+  }

@@ -9,7 +9,7 @@ def getStations():
     stations = []
     for x in stationDict:
         stations.append({"stationName": x, "stationAbreviation": stationDict[x]})
-    return json.dumps({"stations": stations})
+    return json.dumps({"error": False, "stations": stations})
 
 # New way: scrape from BART website
 
@@ -35,4 +35,4 @@ def getStationsByAbvLive(abv):
     description = desc.find_all("p")[0].text.strip()
     map = "https://www.bart.gov" + desc.find_all("a")[1].get("href")
 
-    return json.dumps({"address": address, "description": description, "map": map, "image": img, "lines": servedLines})
+    return json.dumps({"error": False, "address": address, "description": description, "map": map, "image": img, "lines": servedLines})

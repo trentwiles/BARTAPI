@@ -105,6 +105,8 @@ def getDataStation(abv):
     r = requests.get(f"https://www.bart.gov/schedules/eta/{abv}")
     soup = BeautifulSoup(r.text, 'html.parser')
     abv = abv.upper()
+    if abv == "OAKL":
+        return json.dumps({"error": True, "message": " Real time departures are not available for the Oakland Airport Line. Please use BART Trip Planner."})
     if r.status_code != 200:
         return json.dumps({"error": True, "message": "BART website returned a non-200 status code. Check back later."})
     

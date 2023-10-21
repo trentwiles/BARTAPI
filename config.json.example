@@ -1,5 +1,6 @@
 {
     "notionEnabled": true,
     "notionKey": "",
-    "notionDocsPageID": ""
+    "notionDocsPageID": "",
+    "logFile": "bart.log"
 }

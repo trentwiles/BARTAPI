@@ -14,6 +14,10 @@ def getStations():
 # New way: scrape from BART website
 
 def getStationsByAbvLive(abv):
+
+    if bart.getEnglishStationNameFromAbbreviation(abv.upper()) == None:
+        return json.dumps({"error": True, "message": "Invalid station name"})
+
     r = requests.get(f"https://www.bart.gov/stations/{abv.lower()}")
     soup = BeautifulSoup(r.text, 'html.parser')
 
@@ -31,4 +35,4 @@ def getStationsByAbvLive(abv):
     description = desc.find_all("p")[0].text.strip()
     map = "https://www.bart.gov" + desc.find_all("a")[1].get("href")
 
-    return {"address": address, "description": description, "map": map, "image": img, "lines": servedLines}
+    return json.dumps({"address": address, "description": description, "map": map, "image": img, "lines": servedLines})

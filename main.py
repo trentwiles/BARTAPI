@@ -67,5 +67,10 @@ def getSchedule(abv, month, day, year, time, amPM):
         return Response(schedule.getSchedule(abv, month, day, year, time, amPM), content_type="application/json")
     return jsonResp({"error": True, "message": "Invalid station"}, 400)
 
+@app.route("/api/v1/getStation/<station>")
+def getStation(station):
+    station = station.upper()
+    return Response(stations.getStationsByAbvLive(station), content_type="application/json")
+
 if __name__ == '__main__':
     app.run()

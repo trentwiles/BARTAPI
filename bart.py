@@ -155,4 +155,6 @@ def getDataStation(abv):
         
         preFormatedJson.append({"lineTerminus": servedLines[number], "lineColor": servedLinesColors[number], "estimates": timingsToInsert})
     #print(preFormatedJson)
+    if getEnglishStationNameFromAbbreviation(abv) == None:
+        return json.dumps({"error": True, "message": "Invalid station name"})
     return json.dumps({"error": False, "station": getEnglishStationNameFromAbbreviation(abv), "estimates": preFormatedJson})

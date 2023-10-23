@@ -160,3 +160,6 @@ def getDataStation(abv):
     if getEnglishStationNameFromAbbreviation(abv) == None:
         return json.dumps({"error": True, "message": "Invalid station name"})
     return json.dumps({"error": False, "station": getEnglishStationNameFromAbbreviation(abv), "estimates": preFormatedJson})
+
+def getWebsiteStatus():
+    return requests.get("https://www.bart.gov").status_code

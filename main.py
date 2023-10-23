@@ -43,7 +43,10 @@ def getPred(station):
 @app.route("/api/v1/getStations")
 def getStations():
     requestID = bartLogs.createRequestID()
-    rsp = stations.getStations()
+    try:
+        rsp = stations.getStations()
+    except:
+        rsp = json.dumps({"error": True, "message": "Internal error/BART website error"})
     m =  make_response(Response(rsp, content_type="application/json"))
     m.headers["x-request-id"] = requestID
     bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), "/api/v1/getStations", round(time.time()), requestID, json.loads(rsp)["error"])
@@ -52,7 +55,10 @@ def getStations():
 @app.route("/api/v1/getAlerts")
 def getAlerts():
     requestID = bartLogs.createRequestID()
-    rsp = alerts.getAlerts()
+    try:
+        rsp = alerts.getAlerts()
+    except:
+        rsp = json.dumps({"error": True, "message": "Internal error/BART website error"})
     m = make_response(Response(rsp, content_type="application/json"))
     m.headers["x-request-id"] = requestID
     bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), "/api/v1/getAlerts", round(time.time()), requestID, json.loads(rsp)["error"])
@@ -62,7 +68,10 @@ def getAlerts():
 def getSchedule(abv, month, day, year, time, amPM):
     requestID = bartLogs.createRequestID()
     if bart.getEnglishStationNameFromAbbreviation(abv.upper()) != None:
-        rsp = schedule.getSchedule(abv, month, day, year, time, amPM)
+        try:
+            rsp = schedule.getSchedule(abv, month, day, year, time, amPM)
+        except:
+            rsp = json.dumps({"error": True, "message": "Internal error/BART website error"})
     rsp = {"error": True, "message": "Invalid station"}
     m = make_response(Response(rsp, content_type="application/json"))
     m.headers["x-request-id"] = requestID
@@ -73,7 +82,10 @@ def getSchedule(abv, month, day, year, time, amPM):
 def getStation(station):
     requestID = bartLogs.createRequestID()
     station = station.upper()
-    rsp = stations.getStationsByAbvLive(station)
+    try:
+        rsp = stations.getStationsByAbvLive(station)
+    except:
+        rsp = json.dumps({"error": True, "message": "Internal error/BART website error"})
     m = make_response(Response(rsp, content_type="application/json"))
     m.headers["x-request-id"] = requestID
     bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), f"/api/v1/getStation/{station}", round(time.time()), requestID, json.loads(rsp)["error"])

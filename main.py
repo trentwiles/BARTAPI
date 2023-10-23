@@ -79,5 +79,9 @@ def getStation(station):
     bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), f"/api/v1/getStation/{station}", round(time.time()), requestID, json.loads(rsp)["error"])
     return m
 
+@app.route("/robots.txt")
+def robots():
+    return Response("User-agent: *\nDisallow:", content_type="text/plain")
+
 if __name__ == '__main__':
     app.run()

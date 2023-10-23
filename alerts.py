@@ -36,4 +36,4 @@ def getAlerts():
         ev.append({"station": items[0].text, "location": items[1].text, "reason": items[2].text, "returnDate": items[3].text})
         #ev.append(re.sub(r'\n', ' ', x.text.strip()))
     
-    return json.dumps({"currentAlerts": ca, "plannedAlerts": pa, "escalatorAlerts": ea, "elevatorAlerts": ev})
+    return json.dumps({"error": False, "currentAlerts": ca, "plannedAlerts": pa, "escalatorAlerts": ea, "elevatorAlerts": ev})

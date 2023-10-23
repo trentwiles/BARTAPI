@@ -95,5 +95,9 @@ def getStation(station):
 def robots():
     return Response("User-agent: *\nDisallow:", content_type="text/plain")
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return jsonResp({"error": True, "message": "Route not found"}, 404)
+
 if __name__ == '__main__':
     app.run()

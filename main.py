@@ -6,6 +6,7 @@ import schedule
 import bartLogs
 import json
 import time
+import metrics
 
 app = Flask(__name__)
 
@@ -21,7 +22,7 @@ def userAgent():
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template("index.html", varnish=metrics.combine())
     #return jsonResp({"error": False, "message": "Check out bart.trentwil.es for documentation"}, 200)
 
 @app.route("/api/v1/getPredictions/<station>")

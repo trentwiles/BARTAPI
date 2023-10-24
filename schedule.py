@@ -30,8 +30,8 @@ def getSchedule(abv, month, day, year, time, amOrpm):#06%3A00%3AAM
 
 
             line = train.text
-            time = train.find("span", {"class": "schedule-route-time"}).text
-            northTrains.append({"line": color, "terminus": re.sub(r"\n", " ", train.find("span", {"class": "schedule-route-title"}).text), "time": time})
+            time0 = train.find("span", {"class": "schedule-route-time"}).text
+            northTrains.append({"line": color, "terminus": re.sub(r"\n", " ", train.find("span", {"class": "schedule-route-title"}).text), "time": time0})
 
         south_name = soup.find_all("div", {"class": "schedule-platform"})[1].find("h5").text
         south = soup.find_all("div", {"class": "schedule-platform"})[1].find_all("li")
@@ -45,8 +45,8 @@ def getSchedule(abv, month, day, year, time, amOrpm):#06%3A00%3AAM
 
 
             line = train.text
-            time = train.find("span", {"class": "schedule-route-time"}).text
-            southTrains.append({"line": color, "terminus": re.sub(r"\n", " ", train.find("span", {"class": "schedule-route-title"}).text), "time": time})
+            time0 = train.find("span", {"class": "schedule-route-time"}).text
+            southTrains.append({"line": color, "terminus": re.sub(r"\n", " ", train.find("span", {"class": "schedule-route-title"}).text), "time": time0})
             """
             for x in train.find_all("li"):
                 print(x)

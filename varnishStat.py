@@ -12,8 +12,10 @@ def cacheMissHit():
     backendFetch = api["counters"]["MAIN.backend_req"]["value"]
     backendFails = api["counters"]["MAIN.backend_fail"]["value"]
 
-    
-    ratio = hit / (miss + hit)
+    if miss == 0 and hit == 0:
+        ratio = 0
+    else:
+        ratio = hit / (miss + hit)
 
     if backendFails == 0 or backendFetch == 0:
         backendFailRatio = 0

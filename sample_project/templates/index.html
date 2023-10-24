@@ -141,11 +141,7 @@
 
                     doors1 = data.trains[0]["estimates"][0]["formatted"].substring(0, data.trains[0]["estimates"][0]["formatted"].length - " train".length).toUpperCase()
 
-                    if (doors1.includes("UNKNOWN")) {
-                        document.getElementById("firstCarDetails").innerHTML = doors1.slice(-", UNKNOWN DOOR".length)
-                    } else {
-                        document.getElementById("firstCarDetails").innerHTML = doors1
-                    }
+                    document.getElementById("firstCarDetails").innerHTML = doors1
 
 
 
@@ -158,11 +154,7 @@
 
                     doors2 = data.trains[1]["estimates"][0]["formatted"].substring(0, data.trains[1]["estimates"][0]["formatted"].length - " train".length).toUpperCase()
 
-                    if (doors2.includes("UNKNOWN")) {
-                        document.getElementById("secondCarDetails").innerHTML = doors2.slice(-", UNKNOWN DOOR".length)
-                    } else {
-                        document.getElementById("secondCarDetails").innerHTML = doors2
-                    }
+                    document.getElementById("secondCarDetails").innerHTML = doors2
 
                     // if there is only one line in operation
                 } else if (data.trains.length == 1) {

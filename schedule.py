@@ -55,5 +55,5 @@ def getSchedule(abv, month, day, year, time, amOrpm):#06%3A00%3AAM
                 
             """
 
-    return json.dumps({"north": northTrains, "south": southTrains})
+    return json.dumps({"error": False, "north": northTrains, "south": southTrains})
 #getSchedule("ROCK", "10", "19", "2023", "06:00", "AM")

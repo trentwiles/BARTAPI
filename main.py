@@ -76,17 +76,17 @@ def getAlerts():
     return m
 
 @app.route("/api/v1/getSchedule/<abv>/<month>/<day>/<year>/<time>/<amPM>")
-def getSchedule(abv, month, day, year, time, amPM):
+def getSchedule(abv, month, day, year, tme, amPM):
     requestID = bartLogs.createRequestID()
     if bart.getEnglishStationNameFromAbbreviation(abv.upper()) != None:
         try:
-            rsp = schedule.getSchedule(abv, month, day, year, time, amPM)
+            rsp = schedule.getSchedule(abv, month, day, year, tme, amPM)
         except:
             rsp = json.dumps({"error": True, "message": "Internal error/BART website error"})
     rsp = {"error": True, "message": "Invalid station"}
     m = make_response(Response(rsp, content_type="application/json"))
     m.headers["x-request-id"] = requestID
-    bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), f"/api/v1/getSchedule/{abv}/{month}/{day}/{year}/{time}/{amPM}", round(time.time()), requestID, json.loads(rsp)["error"])
+    bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), f"/api/v1/getSchedule/{abv}/{month}/{day}/{year}/{tme}/{amPM}", round(time.time()), requestID, json.loads(rsp)["error"])
     return m
 
 @app.route("/api/v1/getStation/<station>")

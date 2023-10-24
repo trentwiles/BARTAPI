@@ -14,7 +14,11 @@ def cacheMissHit():
 
     
     ratio = hit / (miss + hit)
-    backendFailRatio = backendFails / (backendFails + backendFetch)
+
+    if backendFails == 0 or backendFetch == 0:
+        backendFailRatio = 0
+    else:
+        backendFailRatio = backendFails / (backendFails + backendFetch)
     return {"cacheHits": hit, "cacheMiss": miss, "hitRatio": round(ratio, 3), "backendFetches": backendFetch, "backendFailures": backendFails, "backendFailRatio": round(backendFailRatio, 3)}
 
 def space():

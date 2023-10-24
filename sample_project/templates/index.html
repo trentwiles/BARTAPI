@@ -42,31 +42,57 @@
 <body>
     <div class="message-board">
         <div class="train-time" id="train-time">
-            <p id="firstTerminus">DALY CITY&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;3,10
+            <p id="firstTerminus">
             </p>
-            <p id="firstCarDetails">10-CAR, 3-DOOR</p>
+            <p id="firstCarDetails"></p>
             <p id="secondTerminus">
-                ANTIOCH&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;23,43</p>
-            <p id="secondCarDetails">10-CAR, 3-DOOR</p>
+            </p>
+            <p id="secondCarDetails"></p>
         </div>
     </div>
     <script>
 
+        function getCurrentTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+
+            // Convert hours to 12-hour format
+            hours = hours % 12;
+            hours = hours ? hours : 12; // 12 AM and 12 PM should both be displayed as 12
+
+            // Ensure that single-digit minutes have a leading zero
+            if (minutes < 10) {
+                minutes = '0' + minutes;
+            }
+
+            const formattedTime = `${hours}:${minutes}${ampm}`;
+            return formattedTime;
+        }
+
         function reset() {
-            document.getElementById("train-time").innerHTML = '<p id="firstTerminus">DALY CITY&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;3,10</p>             <p id="firstCarDetails">10-CAR, 3-DOOR</p>             <p id="secondTerminus">ANTIOCH&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;23,43</p>             <p id="secondCarDetails">10-CAR, 3-DOOR</p>'
+            document.getElementById("train-time").innerHTML = '<p id="firstTerminus">             </p>             <p id="firstCarDetails"></p>             <p id="secondTerminus">                 </p>             <p id="secondCarDetails"></p>'
+        }
+
+        function displayTime() {
+            document.getElementById("train-time").innerHTML = "<center><br><h1>TIME: " + getCurrentTime() + "</h1></center>"
         }
 
         function leaving(station, cars, its) {
+            console.log("leaving!")
             while (its != 0) {
                 document.getElementById("train-time").innerHTML = ""
                 document.getElementById("train-time").innerHTML = "<center><h1>" + station + "</h1><h3>" + cars + "</h3></center>"
-                setTimeout(function() { its-- }, 3000);
+                setTimeout(function () { its-- }, 3000);
             }
+            setTimeout(reset(), 5000);
             reset()
             getTrainUpdates()
         }
 
         function getTrainUpdates() {
+            setTimeout(function() {reset()}, 4000);
             $.post("/s/" + window.location.href.slice(-4), function (data) {
 
                 // If there are more than two lines in operation
@@ -95,10 +121,12 @@
                     if (data.trains[0]["estimates"].length == 1) {
                         console.log("*********** HIT @ t1")
                         term1Distance++
+                        term1Distance++
                     }
 
                     if (data.trains[1]["estimates"].length == 1) {
                         console.log("********** HIT @ t2")
+                        term2Distance++
                         term2Distance++
                     }
 
@@ -154,6 +182,7 @@
                     if (data.trains[0]["estimates"].length == 1) {
                         console.log("*********** HIT @ t1")
                         term1Distance++
+                        term1Distance++
                     }
 
                     const tabsOrSpaces = '&emsp;'.repeat(term1Distance);
@@ -181,10 +210,16 @@
 
 
             })
+
+            setTimeout(function() {displayTime()}, 15000);
+            console.log("buller tester")
+            
+            
         }
-        
-        setInterval(getTrainUpdates, 17000);
-        
+
+        getTrainUpdates()
+        setInterval(getTrainUpdates, 5000);
+
     </script>
 </body>
 

@@ -183,9 +183,7 @@
             })
         }
         
-        while(true){
-            setTimeout(function() { getTrainUpdates() }, 17000);
-        }
+        setInterval(getTrainUpdates, 17000);
         
     </script>
 </body>

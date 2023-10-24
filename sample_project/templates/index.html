@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Digital+7" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         @font-face {
@@ -24,7 +23,7 @@
         }
 
         .message-board {
-            width: 400px;
+            width: 800px;
             margin: 20px auto;
             background-color: #000;
             border: 1px solid #ccc;
@@ -42,19 +41,152 @@
 
 <body>
     <div class="message-board">
-        <div class="train-time">
-            <p>DALY CITY&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;3,10</p>
-            <p>10-CAR, 3-DOOR</p>
-            <p>ANTIOCH&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;22,43</p>
-            <p>10-CAR, 3-DOOR</p>
+        <div class="train-time" id="train-time">
+            <p id="firstTerminus">DALY CITY&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;3,10
+            </p>
+            <p id="firstCarDetails">10-CAR, 3-DOOR</p>
+            <p id="secondTerminus">
+                ANTIOCH&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;23,43</p>
+            <p id="secondCarDetails">10-CAR, 3-DOOR</p>
         </div>
     </div>
     <script>
 
+        function reset() {
+            document.getElementById("train-time").innerHTML = '<p id="firstTerminus">DALY CITY&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;3,10</p>             <p id="firstCarDetails">10-CAR, 3-DOOR</p>             <p id="secondTerminus">ANTIOCH&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;23,43</p>             <p id="secondCarDetails">10-CAR, 3-DOOR</p>'
+        }
 
-        $.post("/s/ROCK", function (data) {
-            console.log(data)
-        });
+        function leaving(station, cars, its) {
+            while (its != 0) {
+                document.getElementById("train-time").innerHTML = ""
+                document.getElementById("train-time").innerHTML = "<center><h1>" + station + "</h1><h3>" + cars + "</h3></center>"
+                setTimeout(function() { its-- }, 3000);
+            }
+            reset()
+            getTrainUpdates()
+        }
+
+        function getTrainUpdates() {
+            $.post("/s/" + window.location.href.slice(-4), function (data) {
+
+                // If there are more than two lines in operation
+                if (data.trains.length >= 2) {
+                    // if the first train is leaving
+                    if (data.trains[0]["estimates"][0]["time"] == 0) {
+                        leaving(data.trains[0]["lineTerminus"], data.trains[0]["lineTerminus"][0]["formatted"], 5)
+                    }
+
+                    // if the second train is leaving
+                    if (data.trains[1]["estimates"][0]["time"] == 0) {
+                        // DO THE BIG LEAVING SIGN
+                        leaving(data.trains[1]["lineTerminus"], data.trains[1]["lineTerminus"][0]["formatted"], 5)
+                    }
+
+                    term1 = data.trains[0]["lineTerminus"].toUpperCase()
+                    term2 = data.trains[1]["lineTerminus"].toUpperCase()
+
+                    const maxLen = 30
+
+                    var term1Distance = maxLen - term1.length
+                    var term2Distance = maxLen - term2.length
+
+                    console.log(data.trains[1]["estimates"][1])
+
+                    if (data.trains[0]["estimates"].length == 1) {
+                        console.log("*********** HIT @ t1")
+                        term1Distance++
+                    }
+
+                    if (data.trains[1]["estimates"].length == 1) {
+                        console.log("********** HIT @ t2")
+                        term2Distance++
+                    }
+
+                    const tabsOrSpaces = '&emsp;'.repeat(term1Distance);
+                    const tabsOrSpaces2 = '&emsp;'.repeat(term2Distance);
+
+                    if (data.trains[0]["estimates"].length == 1) {
+                        document.getElementById("firstTerminus").innerHTML = term1 + tabsOrSpaces + data.trains[0]["estimates"][0]["time"]
+                    } else {
+                        document.getElementById("firstTerminus").innerHTML = term1 + tabsOrSpaces + data.trains[0]["estimates"][0]["time"] + "," + data.trains[0]["estimates"][1]["time"]
+                    }
+
+                    doors1 = data.trains[0]["estimates"][0]["formatted"].substring(0, data.trains[0]["estimates"][0]["formatted"].length - " train".length).toUpperCase()
+
+                    if (doors1.includes("UNKNOWN")) {
+                        document.getElementById("firstCarDetails").innerHTML = doors1.slice(-", UNKNOWN DOOR".length)
+                    } else {
+                        document.getElementById("firstCarDetails").innerHTML = doors1
+                    }
+
+
+
+
+                    if (data.trains[1]["estimates"].length == 1) {
+                        document.getElementById("secondTerminus").innerHTML = term2 + tabsOrSpaces2 + data.trains[1]["estimates"][0]["time"]
+                    } else {
+                        document.getElementById("secondTerminus").innerHTML = term2 + tabsOrSpaces2 + data.trains[1]["estimates"][0]["time"] + "," + data.trains[1]["estimates"][1]["time"]
+                    }
+
+                    doors2 = data.trains[1]["estimates"][0]["formatted"].substring(0, data.trains[1]["estimates"][0]["formatted"].length - " train".length).toUpperCase()
+
+                    if (doors2.includes("UNKNOWN")) {
+                        document.getElementById("secondCarDetails").innerHTML = doors2.slice(-", UNKNOWN DOOR".length)
+                    } else {
+                        document.getElementById("secondCarDetails").innerHTML = doors2
+                    }
+
+                    // if there is only one line in operation
+                } else if (data.trains.length == 1) {
+                    // if the first train is leaving
+                    if (data.trains[0]["estimates"][0]["time"] == 0) {
+                        // DO THE BIG LEAVING SIGN
+                        leaving(data.trains[0]["lineTerminus"], data.trains[0]["lineTerminus"][0]["formatted"], 5)
+                    }
+
+                    term1 = data.trains[0]["lineTerminus"].toUpperCase()
+
+                    const maxLen = 30
+
+                    var term1Distance = maxLen - term1.length
+
+
+                    if (data.trains[0]["estimates"].length == 1) {
+                        console.log("*********** HIT @ t1")
+                        term1Distance++
+                    }
+
+                    const tabsOrSpaces = '&emsp;'.repeat(term1Distance);
+
+                    if (data.trains[0]["estimates"].length == 1) {
+                        document.getElementById("firstTerminus").innerHTML = term1 + tabsOrSpaces + data.trains[0]["estimates"][0]["time"]
+                    } else {
+                        document.getElementById("firstTerminus").innerHTML = term1 + tabsOrSpaces + data.trains[0]["estimates"][0]["time"] + "," + data.trains[0]["estimates"][1]["time"]
+                    }
+
+                    doors1 = data.trains[0]["estimates"][0]["formatted"].substring(0, data.trains[0]["estimates"][0]["formatted"].length - " train".length).toUpperCase()
+
+                    if (doors1.includes("UNKNOWN")) {
+                        document.getElementById("firstCarDetails").innerHTML = doors1.slice(-", UNKNOWN DOOR".length)
+                    } else {
+                        document.getElementById("firstCarDetails").innerHTML = doors1
+                    }
+
+
+                    document.getElementById("secondTerminus").innerHTML = ""
+                    document.getElementById("secondCarDetails").innerHTML = ""
+                } else {
+                    document.getElementById("train-time").innerHTML = "Sorry, no trains available at this time"
+                }
+
+
+            })
+        }
+        
+        while(true){
+            setTimeout(function() { getTrainUpdates() }, 17000);
+        }
+        
     </script>
 </body>
 

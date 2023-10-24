@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
 def index():
-    return render_template("index.html")
+    return "hey"
 
 @app.route('/s/<station>', methods=["GET"])
 def hello_world(station):
@@ -15,9 +15,9 @@ def hello_world(station):
 @app.route('/s/<station>', methods=["POST"])
 def api(station):
     r = requests.get(f"https://bart.trentwil.es/api/v1/getPredictions/{station}")
-    if r.json()["error"]:
-        return Response(json.loads({"error": True}), content_type="application/json")
-    return Response(json.loads({"error": False}), content_type="application/json")
+    if not r.json()["error"]:
+        return Response(json.dumps({"error": False, "trains": r.json()["estimates"]}), content_type="application/json")
+    return Response(json.loads({"error": True, "message": f"Response from bart.trentwil.es: {r.status_code}"}), content_type="application/json")
 
 if __name__ == '__main__':
     app.run()

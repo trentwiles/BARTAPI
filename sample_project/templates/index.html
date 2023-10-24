@@ -94,7 +94,7 @@
         function getTrainUpdates() {
             setTimeout(function() {reset()}, 4000);
             $.post("/s/" + window.location.href.slice(-4), function (data) {
-
+                reset()
                 // If there are more than two lines in operation
                 if (data.trains.length >= 2) {
                     // if the first train is leaving
@@ -213,13 +213,12 @@
 
             setTimeout(function() {displayTime()}, 15000);
             console.log("buller tester")
-            reset()
             
             
         }
 
         getTrainUpdates()
-        setInterval(getTrainUpdates, 5000);
+        setInterval(getTrainUpdates, 10000);
 
     </script>
 </body>

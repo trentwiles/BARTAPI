@@ -88,7 +88,7 @@ def processTimeString(timeString):
 def processCarString(trainString, time):
     numberCars = trainString[1:6]
 
-    formatted = numberCars + ", unknown door train"
+    formatted = numberCars + " train"
     doors = -1
     cars = int(trainString[1:3])
     if "Three Door Train" in trainString:

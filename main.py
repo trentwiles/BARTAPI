@@ -75,7 +75,7 @@ def getAlerts():
     bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), "/api/v1/getAlerts", round(time.time()), requestID, json.loads(rsp)["error"])
     return m
 
-@app.route("/api/v1/getSchedule/<abv>/<month>/<day>/<year>/<time>/<amPM>")
+@app.route("/api/v1/getSchedule/<abv>/<month>/<day>/<year>/<tme>/<amPM>")
 def getSchedule(abv, month, day, year, tme, amPM):
     requestID = bartLogs.createRequestID()
     if bart.getEnglishStationNameFromAbbreviation(abv.upper()) != None:

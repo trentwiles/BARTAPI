@@ -20,4 +20,4 @@ def api(station):
     return Response(json.loads({"error": True, "message": f"Response from bart.trentwil.es: {r.status_code}"}), content_type="application/json")
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run(port=5001, host='0.0.0.0')

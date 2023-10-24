@@ -20,9 +20,19 @@ def userAgent():
     except:
         return ""
 
+def convert_bytes(bytes):
+    # Define the denominations and their respective sizes in bytes
+    denominations = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+    sizes = [1, 1024, 1024**2, 1024**3, 1024**4, 1024**5]
+
+    # Find the appropriate denomination
+    for i in range(len(sizes)):
+        if bytes < sizes[i] * 1024 or i == len(sizes) - 1:
+            return f"{bytes / sizes[i]:.2f} {denominations[i]}"
+
 @app.route('/')
 def home():
-    return render_template("index.html", varnish=metrics.combine())
+    return render_template("index.html", varnish=metrics.combine(), convert_bytes=convert_bytes)
     #return jsonResp({"error": False, "message": "Check out bart.trentwil.es for documentation"}, 200)
 
 @app.route("/api/v1/getPredictions/<station>")

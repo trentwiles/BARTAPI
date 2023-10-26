@@ -16,7 +16,10 @@ def createRequestID():
 def writeToLogsFile(ip, ua, path, timestamp, requestID, error):
     logFile = json.loads(open("config.json").read())["logFile"]
     with open(logFile, "a") as l:
-        l.write(f"{ip[0]} - {path} @ {timestamp} - had errors: {error} - {ua} - {requestID}\n")
+        try:
+            l.write(f"{ip[0]} - {path} @ {timestamp} - had errors: {error} - {ua} - {requestID}\n")
+        except:
+            l.write(f"UNKNOWN - {path} @ {timestamp} - had errors: {error} - {ua} - {requestID}\n")
     return True
 
 def rotateLogs():

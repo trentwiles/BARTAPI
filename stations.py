@@ -4,6 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
+ua = json.loads(open("config.json").read())["user_agent"]
+
 def getStations():
     stationDict = bart.getStationAbbreviations()
     stations = []
@@ -18,7 +20,7 @@ def getStationsByAbvLive(abv):
     if bart.getEnglishStationNameFromAbbreviation(abv.upper()) == None:
         return json.dumps({"error": True, "message": "Invalid station name"})
 
-    r = requests.get(f"https://www.bart.gov/stations/{abv.lower()}")
+    r = requests.get(f"https://www.bart.gov/stations/{abv.lower()}", headers={"User-agent": ua})
     soup = BeautifulSoup(r.text, 'html.parser')
 
     addy = soup.find("div", {"class": "field field--field-station-address field--address"})

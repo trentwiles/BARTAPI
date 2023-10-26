@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import re
 import json
 
+ua = json.loads(open("config.json").read())["user_agent"]
+
 # Read the bs4 string for the # of cars a train has
 # Samples:
 # (8 car(Three Door Train)
@@ -102,7 +104,7 @@ def processCarString(trainString, time):
     return {"formatted": formatted, "doors": doors, "cars": cars, "timeFormatted": time, "time": processTimeString(time)}
 
 def getDataStation(abv):
-    r = requests.get(f"https://www.bart.gov/schedules/eta/{abv}")
+    r = requests.get(f"https://www.bart.gov/schedules/eta/{abv}", headers={"User-agent": ua})
     soup = BeautifulSoup(r.text, 'html.parser')
     abv = abv.upper()
     if abv == "OAKL":
@@ -162,4 +164,4 @@ def getDataStation(abv):
     return json.dumps({"error": False, "station": getEnglishStationNameFromAbbreviation(abv), "estimates": preFormatedJson})
 
 def getWebsiteStatus():
-    return requests.get("https://www.bart.gov").status_code
+    return requests.get("https://www.bart.gov", headers={"User-agent": ua}).status_code

@@ -2,12 +2,12 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-
+ua = json.loads(open("config.json").read())["user_agent"]
 
 # THIS NEEDS ERROR HANDLING
 # Look on the wayback machine to see what the page looks like without any alerts
 def getAlerts():
-    r = requests.get("https://www.bart.gov/schedules/advisories")
+    r = requests.get("https://www.bart.gov/schedules/advisories", headers={"User-agent": ua})
     soup = BeautifulSoup(r.text, 'html.parser')
 
     current = soup.find_all("div", {"data-service": "current"})

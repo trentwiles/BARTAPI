@@ -5,10 +5,11 @@ import urllib.parse
 import json
 import sys
 
+ua = json.loads(open("config.json").read())["user_agent"]
 def getSchedule(abv, month, day, year, time, amOrpm):#06%3A00%3AAM
     formattedTime = urllib.parse.quote(time + "%3A" + amOrpm)
     print(f"https://www.bart.gov/schedules/stnsched/{abv.upper()}/{month}.{day}.{year}/{formattedTime}")
-    r = requests.get(f"https://www.bart.gov/schedules/stnsched/{abv.upper()}/{month}.{day}.{year}/{formattedTime}")
+    r = requests.get(f"https://www.bart.gov/schedules/stnsched/{abv.upper()}/{month}.{day}.{year}/{formattedTime}", headers={"User-agent": ua})
     if r.status_code != 200:
         return json.dumps({"error": True, "message": "BART website returned a non-200 status code. Check back later."})
     

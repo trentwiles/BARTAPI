@@ -2,5 +2,6 @@
     "notionEnabled": true,
     "notionKey": "",
     "notionDocsPageID": "",
-    "logFile": "bart.log"
+    "logFile": "bart.log",
+    "user_agent": ""
 }

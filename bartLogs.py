@@ -2,7 +2,7 @@ import string
 import secrets
 import json
 import time
-import shutil
+import random
 
 
 def createRequestID():
@@ -25,6 +25,11 @@ def writeToLogsFile(ip, ua, path, timestamp, requestID, error):
 def rotateLogs():
     def get_current_date():
         current_time = time.localtime()
-        return {"day": current_time.tm_mday, "month": current_time.tm_mon, "year": current_time.tm_year}
+        return current_time.tm_mday, current_time.tm_mon, current_time.tm_year
+
+    
+    day, month, year = get_current_date()
+    with open(f"archives/{month}-{day}-{year}-" + str(random.randint(0,100000000)) + "-bart.log") as w:
+        w.write(open("bart.log").read())
     
     

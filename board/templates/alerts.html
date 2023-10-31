@@ -49,41 +49,14 @@
 <body>
     <div class="message-board">
         <div class="train-time" id="train-time">
-            {{ html | safe }}
+            <marquee direction="up">
+                {% for alert in alerts %}
+                    <h3>{{ alert["title"] }}</h3>
+                    <small>{{ alert["content"] }}</small>
+                {% endfor %}
+            </marquee>
         </div>
     </div>
-
-{% if leaving %}
-    <script>
-        let element = document.getElementById("train-time");
-        let numLoops = 6;
-        let currentLoop = 0;
-
-        function toggleVisibility() {
-            if (currentLoop >= numLoops) {
-                window.location.href = window.location.pathname + "/time"; // End the loop after 5 iterations
-            }
-
-            element.style.display = "block"; // Show the element
-            setTimeout(function () {
-            element.style.display = "none"; // Hide the element after 4 seconds
-            currentLoop++;
-            setTimeout(toggleVisibility, 1500); // Wait for 2 seconds and continue
-            }, 2000);
-
-        }
-
-        toggleVisibility();
-        
-    </script>
-{% else %}
-    <script>
-        setInterval(function() {
-            window.location.href = window.location.pathname + "/time";
-        }, 16000);
-    </script>
-{% endif %}
-
 </body>
 
 </html>

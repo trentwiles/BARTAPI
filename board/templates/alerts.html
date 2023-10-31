@@ -50,13 +50,19 @@
     <div class="message-board">
         <div class="train-time" id="train-time">
             <marquee direction="up">
+                <h1>Service Alerts</h1>
                 {% for alert in alerts %}
-                    <h3>{{ alert["title"] }}</h3>
-                    <small>{{ alert["content"] }}</small>
+                    <h4>{{ alert["message"] }}</h4>
+                    <br>
                 {% endfor %}
             </marquee>
         </div>
     </div>
+    <script>
+        setInterval(function() {
+            window.location.href = '/s/{{station}}';
+        }, 8000);
+    </script>
 </body>
 
 </html>

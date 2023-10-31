@@ -47,5 +47,9 @@ def hello_world(station):
 def stationTime(station):
     return render_template("time.html", station=station)
 
+@app.route('/s/<station>/alerts', methods=["GET"])
+def alerts(station):
+    return render_template("alerts.html", alerts=requests.get("https://bart.trentwil.es/api/v1/getAlerts").json()["plannedAlerts"], station=station)
+
 if __name__ == '__main__':
     app.run(port=5001, host='0.0.0.0')

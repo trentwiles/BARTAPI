@@ -3,6 +3,7 @@ import secrets
 import json
 import time
 import random
+import os
 
 
 def createRequestID():
@@ -32,4 +33,4 @@ def rotateLogs():
     with open(f"archives/{month}-{day}-{year}-" + str(random.randint(0,100000000)) + "-bart.log") as w:
         w.write(open("bart.log").read())
     
-    
+    os.remove("bart.log")

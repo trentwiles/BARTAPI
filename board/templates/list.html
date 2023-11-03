@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>BART Station Board</title>
+</head>
+
+<body>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+    <center>
+        <h1>Select a Station</h1>
+        <br>
+        {% for stn in stations %}
+        <a href="/s/{{stn['stationAbreviation']}}">{{stn['stationName']}}</a><br>
+        {% endfor %}
+    </center>
+</body>
+
+</html>

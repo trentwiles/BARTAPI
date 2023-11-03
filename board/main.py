@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
 def index():
-    return "hey"
+    return render_template("list.html", stations=requests.get("https://bart.trentwil.es/api/v1/getStations").json()["stations"])
 
 @app.route('/s/<station>', methods=["GET"])
 def hello_world(station):

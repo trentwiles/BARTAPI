@@ -17,7 +17,7 @@ def getTitles(endpoint):
             d.append({"date": dateText, "title": title, "url": url})
         except:
             fds = ""
-    return d
+    return {"error": False, "data": {d}}
 
 def getLatestTitles():
     return getTitles("https://www.bart.gov/news/articles")
@@ -44,4 +44,4 @@ def getArticleContent(link):
         if x != "\n":
             raw += str(x)
 
-    return {"title": soup.title.text, "date": soup.find("div", {"class": "field field--field-news-date field--datetime"}).text.strip(), "html": raw, "markdown": md(raw)}
+    return {"error": False, "title": soup.title.text, "date": soup.find("div", {"class": "field field--field-news-date field--datetime"}).text.strip(), "html": raw, "markdown": md(raw)}

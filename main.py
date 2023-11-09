@@ -7,6 +7,7 @@ import bartLogs
 import json
 import time
 import metrics
+import news
 
 app = Flask(__name__)
 
@@ -102,6 +103,19 @@ def getStation(station):
     m.headers["x-request-id"] = requestID
     bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), f"/api/v1/getStation/{station}", round(time.time()), requestID, json.loads(rsp)["error"])
     return m
+
+@app.route("/api/v1/getNewsTitles")
+def getNT():
+    requestID = bartLogs.createRequestID()
+    try:
+        station = news.getLatestTitles()
+    except:
+        rsp = json.dumps({"error": True, "message": "Internal error/BART website error"})
+    m = make_response(Response(rsp, content_type="application/json"))
+    m.headers["x-request-id"] = requestID
+    bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), f"/api/v1/getNews", round(time.time()), requestID, json.loads(rsp)["error"])
+    return m
+
 
 @app.route("/robots.txt")
 def robots():

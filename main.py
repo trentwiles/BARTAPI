@@ -11,6 +11,9 @@ import news
 
 app = Flask(__name__)
 
+# temp for HVN
+ENABLE_VARNISH = False
+
 def jsonResp(input, status):
     # Helper function to create JSON responses for API methods
     return Response(json.dumps(input), content_type="application/json"), status
@@ -33,7 +36,10 @@ def convert_bytes(bytes):
 
 @app.route('/')
 def home():
-    return render_template("index.html", varnish=metrics.combine(), convert_bytes=convert_bytes)
+    if ENABLE_VARNISH:
+        return render_template("index.html", varnished=True, varnish=metrics.combine(), convert_bytes=convert_bytes)
+    else:
+        return render_template("index.html", varnished=False)
     #return jsonResp({"error": False, "message": "Check out bart.trentwil.es for documentation"}, 200)
 
 @app.route("/api/v1/getPredictions/<station>")

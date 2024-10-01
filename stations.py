@@ -10,7 +10,7 @@ def getStations():
     stationDict = bart.getStationAbbreviations()
     stations = []
     for x in stationDict:
-        stations.append({"stationName": x, "stationAbreviation": stationDict[x]})
+        stations.append({"stationName": x, "stationAbbreviation": stationDict[x]})
     return json.dumps({"error": False, "stations": stations})
 
 # New way: scrape from BART website

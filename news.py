@@ -17,7 +17,7 @@ def getTitles(endpoint):
             d.append({"date": dateText, "title": title, "url": url})
         except:
             fds = ""
-    return {"error": False, "data": {d}}
+    return {"error": False, "data": d}
 
 def getLatestTitles():
     return getTitles("https://www.bart.gov/news/articles")

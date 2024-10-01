@@ -35,6 +35,6 @@ def getStationsByAbvLive(abv):
 
     address = addy.text.strip()
     description = desc.find_all("p")[0].text.strip()
-    map = "https://www.bart.gov" + desc.find_all("a")[1].get("href")
+    map = desc.find_all("a")[1].get("href")
 
     return json.dumps({"error": False, "address": address, "description": description, "map": map, "image": img, "lines": servedLines})

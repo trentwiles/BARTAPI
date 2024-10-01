@@ -6,13 +6,10 @@ import schedule
 import bartLogs
 import json
 import time
-import metrics
 import news
 
 app = Flask(__name__)
 
-# temp for HVN
-ENABLE_VARNISH = False
 PORT = json.loads(open("config.json").read())["port"]
 
 def jsonResp(input, status):
@@ -37,11 +34,7 @@ def convert_bytes(bytes):
 
 @app.route('/')
 def home():
-    if ENABLE_VARNISH:
-        return render_template("index.html", varnished=True, varnish=metrics.combine(), convert_bytes=convert_bytes)
-    else:
-        return render_template("index.html", varnished=False)
-    #return jsonResp({"error": False, "message": "Check out bart.trentwil.es for documentation"}, 200)
+    return render_template("index.html")
 
 @app.route("/api/v1/getPredictions/<station>")
 def getPred(station):

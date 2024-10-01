@@ -3,5 +3,6 @@
     "notionKey": "",
     "notionDocsPageID": "",
     "logFile": "bart.log",
-    "user_agent": ""
+    "user_agent": "",
+    "port": 5000
 }

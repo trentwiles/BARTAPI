@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 # temp for HVN
 ENABLE_VARNISH = False
+PORT = json.loads(open("config.json").read())["port"]
 
 def jsonResp(input, status):
     # Helper function to create JSON responses for API methods
@@ -155,4 +156,4 @@ def page_not_found(error):
     return jsonResp({"error": True, "message": "Route not found"}, 404)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=PORT)

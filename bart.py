@@ -5,12 +5,6 @@ import json
 
 ua = json.loads(open("config.json").read())["user_agent"]
 
-# Read the bs4 string for the # of cars a train has
-# Samples:
-# (8 car(Three Door Train)
-# (6 car(Three Door Train))
-# (6 car)
-
 def getStationAbbreviations():
     # I have about half of them
     return {
@@ -159,7 +153,7 @@ def getDataStation(abv):
         timings.append(timingList)
         cars.append(carsList)
     
-    print(carsList)
+    #print(carsList)
 
 
     preFormatedJson = []

@@ -91,17 +91,22 @@ def processTimeString(timeString):
     return time
 
 def processCarString(trainString, time):
+    # car string comes in looking like:
+    # (8 car) or (6 car)
     numberCars = trainString[1:6]
 
-    formatted = numberCars + " train"
-    doors = -1
-    cars = int(trainString[1:3])
-    if "Three Door Train" in trainString:
-        formatted = numberCars + ", " + "3 door train"
-        doors = 3
-    if "Two Door Train" in trainString:
-        formatted = numberCars + ", " + "2 door train"
-        doors = 2
+    # BART trains use 6 or 8 car trains
+    # Since today BART only uses one type of rolling stock,
+    # ALL trains have 3 doors
+    #
+    # Due to this, BART's website no longer shows whether a train
+    # is a 3 door (modern) or 2 door (legacy) train
+    #
+    # See https://en.wikipedia.org/wiki/Bay_Area_Rapid_Transit#Car_types
+    
+    formatted = numberCars + ", 3 door train"
+    doors = 3
+    cars = int(trainString[1:2])
 
 
     return {"formatted": formatted, "doors": doors, "cars": cars, "timeFormatted": time, "time": processTimeString(time)}
@@ -153,6 +158,8 @@ def getDataStation(abv):
 
         timings.append(timingList)
         cars.append(carsList)
+    
+    print(carsList)
 
 
     preFormatedJson = []

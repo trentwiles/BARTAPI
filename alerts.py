@@ -1,39 +1,70 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import bart
 
 ua = json.loads(open("config.json").read())["user_agent"]
 
-# THIS NEEDS ERROR HANDLING
-# Look on the wayback machine to see what the page looks like without any alerts
-def getAlerts():
-    r = requests.get("https://www.bart.gov/schedules/advisories", headers={"User-agent": ua})
-    soup = BeautifulSoup(r.text, 'html.parser')
-
-    current = soup.find_all("div", {"data-service": "current"})
-    plannedAlerts = soup.find("table", {"class": "alerts-table"}) # pulls up the first one, which is pla
-    escAlerts = soup.find("div", {"data-service": "bart_escalator_service_advisories"})
-    elvAlerts = soup.find("div", {"data-service": "bart_elevator_service_advisories"})
-
-    ca = []
-    for x in current:
-        ca.append(x.find("div", {"class": "alert"}).text.strip())
-
-    pa = []
-    for x in plannedAlerts.find_all("tr"):
-        # removing the last 11 chars because that's "\nRead More"
-        pa.append({"message": x.text.strip()[:-11], "url": "https://www.bart.gov" + x.find("a").get("href")})
+def getAlerts():   
+    current_alerts = helperCurrentAlerts()
+    elevator_alerts = helperElevatorAndEscalatorAlerts("elevator")
+    escalator_alerts = helperElevatorAndEscalatorAlerts("escalator")
     
-    ea = []
-    for x in escAlerts.find_all("tr"):
-        items = x.find_all("td")
-        # website does this weird thing where it adds random \n characters
-        ea.append({"station": items[0].text, "location": items[1].text, "reason": items[2].text, "returnDate": items[3].text})
+    return json.dumps({"error": False, "currentAlerts": current_alerts, "elevatorAlerts": elevator_alerts, "escalatorAlerts": escalator_alerts})
     
-    ev = []
-    for x in elvAlerts.find_all("tr"):
-        items = x.find_all("td")
-        ev.append({"station": items[0].text, "location": items[1].text, "reason": items[2].text, "returnDate": items[3].text})
-        #ev.append(re.sub(r'\n', ' ', x.text.strip()))
+
+def helperCurrentAlerts():
+    r_current = requests.get("https://www.bart.gov/schedules/advisories/current", headers={"User-agent": ua})
+    html = r_current.json()["html"]
+    soup = BeautifulSoup(html, "html.parser")
+    alerts = soup.find("div", {"class": "alerts-body"})
     
-    return json.dumps({"error": False, "currentAlerts": ca, "plannedAlerts": pa, "escalatorAlerts": ea, "elevatorAlerts": ev})
+    # When there are no alerts, you'll see a message that looks like this:
+    # <div class="alert"><span class="alert-inner"><strong>Service Alert</strong>: No advisories issued.</span></div>
+    service_alerts = []
+    for alert in alerts.find_all("div", {"class": "alert"}):
+        service_alerts.append({"message": alert.text.strip()})
+    
+    return service_alerts
+
+def helperElevatorAndEscalatorAlerts(type):
+    # type must be either "elevator" or "escalator"
+    r_elevator = requests.get(f"https://www.bart.gov/schedules/advisories_table/bart_{type}_service_advisories", headers={"User-agent": ua})
+    html = r_elevator.json()["html"]
+    soup = BeautifulSoup(html, "html.parser")
+    alerts = soup.find("table", {"class": "alerts-table"})
+    alert_holder = []
+    for x in alerts.find_all("tr"):
+        # <td> - #1 Station name
+        # <td> - #2 Location of incident
+        # <td> - #3 Type of repair
+        # <td> - #4 Date
+        
+        counter = 1
+        data_struct = {
+            "station": "",
+            "station_full_name": "",
+            "location_in_station": "",
+            "reason": "",
+            "service_return_date": ""
+        }
+        for dataPoint in x.find_all('td'):
+            if counter == 1:
+                station_full_name = dataPoint.text
+                station_abv = bart.getStationAbbreviationByName(station_full_name)
+                    
+                data_struct["station"] = station_abv
+                data_struct["station_full_name"] = station_full_name
+            
+            if counter == 2:
+                data_struct["location_in_station"] = dataPoint.text
+                
+            if counter == 3:
+                data_struct["reason"] = dataPoint.text
+            
+            if counter == 4:
+                data_struct["service_return_date"] = dataPoint.text
+                
+            counter += 1
+        alert_holder.append(data_struct)
+    return alert_holder

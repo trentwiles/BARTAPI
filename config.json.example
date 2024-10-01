@@ -1,7 +1,4 @@
 {
-    "notionEnabled": true,
-    "notionKey": "",
-    "notionDocsPageID": "",
     "logFile": "bart.log",
     "user_agent": "",
     "port": 5000

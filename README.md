@@ -7,3 +7,11 @@ BART's legacy API is the RESTful API provided by BART. Sadly, it doesn't work we
 
 ## Feedback
 If you have any feedback, concerns, or suggestions, please contact me using me@trentwil.es. Additionally, you should submit pull requests if you see something that should be changed or repaired!
+
+## Running Locally
+
+Clone the repo and copy `config.json.example` to `config.json`. Edit the `config.json` file to your liking, changing the user_agent to something meaningful.
+
+Install the requirements by running `python3 -r requirements.txt`.
+
+Run the server: `python3 main.py`

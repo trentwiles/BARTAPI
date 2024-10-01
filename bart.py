@@ -107,8 +107,10 @@ def processCarString(trainString, time):
     return {"formatted": formatted, "doors": doors, "cars": cars, "timeFormatted": time, "time": processTimeString(time)}
 
 def getDataStation(abv):
-    r = requests.get(f"https://www.bart.gov/schedules/eta/{abv}", headers={"User-agent": ua})
-    soup = BeautifulSoup(r.text, 'html.parser')
+    r = requests.get(f"https://www.bart.gov/schedules/eta_schedule/{abv}", headers={"User-agent": ua})
+    html = r.json()["html"]
+        
+    soup = BeautifulSoup(html, 'html.parser')
     abv = abv.upper()
     if abv == "OAKL":
         return json.dumps({"error": True, "message": " Real time departures are not available for the Oakland Airport Line. Please use BART Trip Planner."})

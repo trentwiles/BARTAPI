@@ -115,12 +115,12 @@ def getStation(station):
 def getNT():
     requestID = bartLogs.createRequestID()
     try:
-        rsp = news.getLatestTitles()
+        rsp = json.dumps(news.getLatestTitles())
     except:
         rsp = json.dumps({"error": True, "message": "Internal error/BART website error"})
     m = make_response(Response(rsp, content_type="application/json"))
     m.headers["x-request-id"] = requestID
-    bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), f"/api/v1/getNewsTitles", round(time.time()), requestID, json.loads(rsp)["error"])
+    bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), "/api/v1/getNewsTitles", round(time.time()), requestID, json.loads(rsp)["error"])
     return m
 
 @app.route("/api/v1/getNewsTitlesByYear/<year>")

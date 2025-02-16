@@ -67,10 +67,11 @@ def getStations():
 @app.route("/api/v1/getAlerts")
 def getAlerts():
     requestID = bartLogs.createRequestID()
-    try:
-        rsp = alerts.getAlerts()
-    except:
-        rsp = json.dumps({"error": True, "message": "Internal error/BART website error"})
+    rsp = alerts.getAlerts()
+    # try:
+    #     rsp = alerts.getAlerts()
+    # except:
+    #     rsp = json.dumps({"error": True, "message": "Internal error/BART website error"})
     m = make_response(Response(rsp, content_type="application/json"))
     m.headers["x-request-id"] = requestID
     bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), "/api/v1/getAlerts", round(time.time()), requestID, json.loads(rsp)["error"])

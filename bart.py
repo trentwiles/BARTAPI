@@ -49,6 +49,7 @@ def getStationAbbreviations():
         "Richmond": "RICH",
         "Rockridge": "ROCK",
         "San Bruno": "SBRN",
+        "San Francisco Int'l Airport": "SFIA",
         "San Leandro": "SANL",
         "South Hayward": "SHAY",
         "South San Fransisco": "SSAN",

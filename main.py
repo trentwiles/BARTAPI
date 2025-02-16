@@ -105,7 +105,7 @@ def getStation(station):
     bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), f"/api/v1/getStation/{station}", round(time.time()), requestID, json.loads(rsp)["error"])
     return m
 
-@app.route("/api/v1/getNewsTitles")
+@app.route("/api/v1/getNews")
 def getNT():
     requestID = bartLogs.createRequestID()
     try:
@@ -117,7 +117,7 @@ def getNT():
     bartLogs.writeToLogsFile(request.headers.get('X-Forwarded-For'), userAgent(), "/api/v1/getNewsTitles", round(time.time()), requestID, json.loads(rsp)["error"])
     return m
 
-@app.route("/api/v1/getNewsTitlesByYear/<year>")
+@app.route("/api/v1/getNewsByYear/<year>")
 def getNewsYear(year):
     requestID = bartLogs.createRequestID()
     try:
